@@ -1,0 +1,11 @@
+numpy>=1.20.0
+scipy
+torch>=1.10.0
+pytorch-msssim==0.2.0
+tensorboard
+tqdm
+bd-metric
+ptflops
+protobuf>=3.20.2
+Pillow
+gdown
