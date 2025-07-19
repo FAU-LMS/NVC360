@@ -70,7 +70,7 @@ You can download them via the provided [download script](model_weights/download.
 Model weights for DCVC-HEM must be loaded to the DCVC-HEM model from [https://github.com/microsoft/DCVC](https://github.com/microsoft/DCVC).
 Model weights for the DCVC-HEM-360 model must be loaded to the DCVC-HEM-360 model available in this repository.
 
-## Loading pre-trained model weights
+## Model setup
 
 Please make sure to download the pre-trained model weights before proceeding with this step.
 
