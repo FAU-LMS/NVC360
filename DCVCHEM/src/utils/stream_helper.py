@@ -49,8 +49,6 @@ def get_state_dict(ckpt_path):
     ckpt = torch.load(ckpt_path, map_location=torch.device('cpu'), weights_only=True)
     if "state_dict" in ckpt:
         ckpt = ckpt['state_dict']
-    if "model_state_dict" in ckpt:
-        ckpt = ckpt["model_state_dict"]
     if "net" in ckpt:
         ckpt = ckpt["net"]
     consume_prefix_in_state_dict_if_present(ckpt, prefix="module.")

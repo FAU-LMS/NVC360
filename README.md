@@ -11,17 +11,20 @@ Please find further information on citing this work and the baseline work at the
 
 - [x] Publish UGC360 dataset (July 2025)
 - [x] Publish UGC360 example use (July 2025)
-- [ ] Publish UGC360 download helper script (August 2025)
+- [x] Publish UGC360 download helper script (October 2025)
 - [x] Publish model weights (July 2025)
 - [x] Publish model weights download helper script (July 2025)
 - [x] Publish model source code (July 2025)
 - [x] Publish pre-trained model loading example use (July 2025) 
-- [ ] Publish video encoding/decoding example script (August 2025)
+- [x] Publish video encoding/decoding example script (October 2025)
 
 ## UGC360 dataset
 
 The dataset is available for download via Huggingface: [UGC360 dataset](https://huggingface.co/datasets/FAU-LMS/UGC360).
-Please download and unpack the dataset according to the instructions presented there.
+Please download and unpack the dataset according to the instructions presented there or use the provided [download script](download_ugc360.py) (see [Prerequisites](#prerequisites) for instructions on setting up the project):
+```shell
+python download_ugc360.py --subset S M L --download_dir UGC360
+```
 
 The `UGC360` pytorch dataset subclass in this repository provides a ready-to-use dataset implementation to use the UGC360 dataset for training.
 The provided dataset implementation incorporates the proposed **Flow-Guided Reprojection** with configurable parameters.
@@ -52,6 +55,9 @@ plt.show()
 
 Pre-trained model weights are available for the DCVC-HEM and the extended DCVC-HEM-360 models.
 You can download them via the provided [download script](model_weights/download.py).
+```shell
+python model_weights/download.py
+```
 
 | Filename                                                                                                       | FGR | vimeo90k | UGC360 | Model        |
 |----------------------------------------------------------------------------------------------------------------|-----|---------|--------|--------------|
@@ -93,6 +99,27 @@ model = PosInputDMC(posinput_positions=posinput_positions)
 model_state_dict = get_state_dict(checkpoint_filepath)
 model.load_state_dict(model_state_dict)
 ```
+
+### Encoder/decoder CLI
+
+An exemplary encoder/decoder CLI application allows to encode a folder of PNG frames to a bitstream file or decode a bitstream file to a folder of PNG frames using the discussed NVC models.
+Please make sure to download the pre-trained model weights before proceeding with this step.
+
+```shell
+# Encode 360-degree sequence
+python -m nvc360 encode --model dcvchem360 --intra-weights acmmm2022_image_psnr.pth.tar --inter-weights checkpoint_dcvchem360_ugc360+vimeo90k.pth --quality 0 --projection erp --gop 32 ./png_sequence encoded.enc
+
+# Encode perspective sequence
+python -m nvc360 encode --model dcvchem360 --intra-weights acmmm2022_image_psnr.pth.tar --inter-weights checkpoint_dcvchem360_ugc360+vimeo90k.pth --quality 0 --projection none --gop 32 ./png_sequence encoded.enc
+
+# Decode sequence
+python -m nvc360 decode encoded.enc ./decoded_pngs
+
+# Decode header data only
+python -m nvc360 decode --header-only encoded.enc
+```
+
+Run `python -m nvc360 encode -h` or `python -m nvc360 decode -h` to get further information on the available command line arguments.
 
 ## Prerequisites
 
