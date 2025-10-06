@@ -32,25 +32,24 @@ def download_and_unpack(subset: str, outdir: Path):
     # multipart archives (S, M)
     if len(files) > 1:
         zipfile = next(f for f in local_files if f.suffix == ".zip")
-        allzip = outdir / f"{subset}-all.zip"
+        allzip = outdir / f"UGC360-{subset}-all.zip"
         print(f"Joining parts into {allzip.name}")
         subprocess.run(
-            ["zip", "-s-", str(zipfile), "-O", str(allzip)],
+            ["zip", "-q", "-s-", str(zipfile.name), "-O", str(allzip.name)],
             check=True,
-            cwd=outdir,
+            cwd=outdir
         )
-        print(f"Unpacking {allzip.name}")
-        subprocess.run(["unzip", "-o", str(allzip)], check=True, cwd=outdir)
-
         print("Cleaning up split archives")
         for f in local_files:
             f.unlink()
+        print(f"Unpacking {allzip.name}")
+        subprocess.run(["unzip", "-q", "-o", str(allzip.name)], check=True, cwd=outdir)
         allzip.unlink()
     else:
         # single archive (L)
         zipfile = local_files[0]
         print(f"Unpacking {zipfile.name}")
-        subprocess.run(["unzip", "-o", str(zipfile)], check=True, cwd=outdir)
+        subprocess.run(["unzip", "-q", "-o", str(zipfile.name)], check=True, cwd=outdir)
         zipfile.unlink()
 
 
